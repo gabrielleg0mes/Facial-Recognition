@@ -1,0 +1,64 @@
+org: compasspb
+service: vision
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: python3.9
+  environment:
+    BUCKET_NAME: vision-v2  # Nome do bucket
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+        - "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::vision-v2"
+        - "arn:aws:s3:::vision-v2/*"
+    - Effect: "Allow"
+      Action:
+        - "rekognition:DetectFaces"
+        - "rekognition:DetectLabels"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "bedrock:InvokeModel"
+      Resource: "*"
+
+functions:
+  health:
+    handler: handler.health
+    events:
+      - httpApi:
+          path: /
+          method: get
+  v1Description:
+    handler: handler.v1_description
+    events:
+      - httpApi:
+          path: /v1
+          method: get
+  v2Description:
+    handler: handler.v2_description
+    events:
+      - httpApi:
+          path: /v2
+          method: get
+  v1Vision:
+    handler: handlers.v1_vision_handler.handler_v1
+    events:
+      - httpApi:
+          path: /v1/vision
+          method: post
+  v2Vision:
+    handler: handlers.v2_vision_handler.handler_v2
+    events:
+      - httpApi:
+          path: /v2/vision
+          method: post
+  s3Bucket:
+    handler: users.handler
+    events:
+      - s3:
+          bucket: vision-v2      # Escolher nome do bucket
+          event: s3:ObjectCreated:*
