@@ -44,8 +44,8 @@ visao-computacional/
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/Compass-pb-aws-2024-JULHO-A/sprint-8-pb-aws-julho-a.git
-   cd sprint-8-pb-aws-julho-a
+   https://github.com/gabrielleg0mes/Facial-Recognition.git
+   cd Facial-Recognition
    ```
 
 2. **Instale o Serverless Framework:**
